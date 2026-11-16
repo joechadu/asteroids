@@ -9,7 +9,12 @@ const H = 600;
 const keys = {};               // teclas mantenidas
 const justPressed = new Set(); // teclas pulsadas en este frame
 
-
+window.addEventListener('keydown', e => {
+  if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Space'].includes(e.code))
+    e.preventDefault();
+  if (!keys[e.code]) justPressed.add(e.code);
+  keys[e.code] = true;
+});
 
 window.addEventListener('keyup', e => {
   keys[e.code] = false;

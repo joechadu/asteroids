@@ -19,11 +19,11 @@ README.md
 `game.js` está organizado en secciones separadas por banners `// ── Nombre ───…`, en este orden:
 1. **Input** — `keys` (mantenidas) y `justPressed` + `pressed(code)` (flanco, se consume al leer). Usa `e.code` (`ArrowLeft`, `Space`, …).
 2. **Utils** — `wrap`, `dist`, `rand`, `randInt`.
-3. **Entidades** (clases) — `Bullet`, `Asteroid`, `Ship`, `Particle`. Contrato común:
+3. **Entidades** (clases) — `Bullet`, `Asteroid`, `PowerUp`, `Ship`, `Particle`. Contrato común:
    - Propiedades `x`, `y`, `vx`, `vy`, `radius`, `dead`.
    - `update(dt)` (dt en segundos) y `draw()` (usa el `ctx` global).
    - Los objetos con vida limitada usan `ttl` y marcan `dead = true`.
-4. **Estado del juego** — globals mutables `ship, bullets, asteroids, particles, score, lives, level, state, deadTimer`. Funciones `initGame`, `nextLevel`, `spawnAsteroids`, `explode`, `killShip`.
+4. **Estado del juego** — globals mutables `ship, bullets, asteroids, particles, powerUps, score, lives, level, state, deadTimer, tripleShotTimer, asteroidsKilled, powerUpDropAt, powerUpSpawned`. Funciones `initGame`, `nextLevel`, `spawnAsteroids`, `explode`, `killShip`.
 5. **Update** — máquina de estados `state`: `'playing' | 'dead' | 'gameover'`. Colisiones circulares por `dist()`.
 6. **Draw** — `draw()`, `drawHUD()`, `drawOverlay()`, `drawLifeIcon()`.
 7. **Loop principal** — `requestAnimationFrame`, `dt` clamp a `0.05` s.
@@ -53,5 +53,6 @@ npx serve .          # http://localhost:3000
 No hay build, lint ni tests. Verificar manualmente en el navegador.
 
 ## Notas
-- El README menciona "power-ups" y "estrella fugaz", pero **no están implementados** en `game.js` actualmente.
+- **Power-up Disparo Triple** implementado: aparece garantizado una vez por nivel, en la destrucción N sorteada por `resetPowerUpDrop()` (`POWERUP_DROP_MIN..MAX`, acotado a las destrucciones posibles del nivel). Se recoge tocándolo, caduca a los `POWERUP_TTL` (5 s) y da `TRIPLE_DURATION` (10 s) de abanico de 3 balas. Morir lo cancela; cambiar de nivel no.
+- La "estrella fugaz" que menciona el README **no está implementada**.
 - Demo publicada: https://klerith.github.io/claude-asteroids/
